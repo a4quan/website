@@ -1,0 +1,1672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/nouislider@14.7.0/distribute/nouislider.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@14.7.0/distribute/nouislider.min.css" />
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.cdnfonts.com/css/urw-geometric" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toronto Neighbourhood Data</title>
+  <script src="script.js"></script>
+  <script src="multiple.js"></script>
+</head>
+<body>
+
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://d3js.org/topojson.v1.min.js"></script>
+    <script>
+      var selectedValues = [0,20];
+      var sliderOn = false;
+      var lightestColor = "#ebebeb";
+      var darkestColor = "#10986b";
+      var circleColour = "#10986b";
+      var counter = 0;
+      var legendLength; var legendMax;
+      var order = "linear"; var legendMax;
+      var h = 0.000; var legendMax;
+      var w = 0; var legendMax;
+      var newRow = []; var legendMax;
+      var circles = "";
+      var maxGraphText = "";
+      var graphLineD = "";
+      var i = 0;
+      var criCat = "";
+      var dataSource = "https://open.toronto.ca/dataset/neighbourhood-profiles/";
+      var criToggle = false;
+      var medianToggle = true;
+      var tSpan = "";
+      var averageMedian = 0
+      var normalChange = 0
+      var toggleCheckbox1 = ""
+      var toggleCheckbox2 = ""
+      var toggle2 = ""
+      var ageSlider1 = ""
+      var ageSlider2 = ""
+      var ageSliderLength = 0
+      var criYearString = " (2023)"
+      var isFirstChange1 = true
+      var criColumns = ""
+      var frozenSlider1 = ""
+      var frozenSlider2 = ""
+      var multiView = false
+      var mouseoverOff = false
+      var oldSelected = ""
+      var changeNum = ""
+      var counta = 0
+      var preChangeVal = 0
+      var noRender = false
+      var defYear = 2014
+      var titleCheck = ""
+      var pastData = 0
+      var runningFunc = false
+      var mouseIn = false
+    </script>
+
+    
+
+  <div id="menu" class="left-container">
+    <div id="leftMenu" class="menu-container">
+    <!-- Your left-side menu content goes here -->
+    <ul id="menu">
+        <li class = "menu-item">
+          <div class="menuI">
+            <b><p id="togPopulation" class="menuTopLabel" onclick="setEmCorrect();toggleBold(id);help('back')">Population</p></b><span id="init-arrow" class="arrow-icon"></span>
+          </div>
+          <ul id="init-sub" class="sub-menu">
+              <li><div id="togqAverageAgeRect" class="rectangle"></div><p id="togqAverageAge" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['2averageAge','dec']);reset();help('back');toggleDropdown();">Age</p></li>
+              <li><div id="togqPopAgeRect" class="rectangle"></div><p id="togqPopAge" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['tempPop','per']);reset();help('back')">Population by Age</p></li>
+              <li><div id="togqPopulationAgeRect" class="rectangle"></div><p id="togqPopulationAge" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['totPop','num']);reset();help('back')">Total Population</p></li>
+          </ul>
+        </li>
+        <li class = "menu-item">
+          <div class="menuI">
+            <p id="togIncomePre" class="menuTopLabel" onclick="setEmCorrect();toggleBold(id);help('back')">Income (2020)</p><span class="arrow-icon"></span>
+          </div>
+          <ul class="sub-menu">
+            <li><div id="togqsiIncomeRect" class="rectangle"></div><p id="togqsiIncome" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['4avgIncome','money']);reset();reset();help('back')">Total Income</p></li>
+            <li><div id="togqsiTaxRect" class="rectangle"></div><p id="togqsiTax" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['4tax','money']);reset();help('back')">Total After-Tax Income</p></li>
+            <li><div id="togqsiMarketRect" class="rectangle"></div><p id="togqsiMarket" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['4market','money']);reset();help('back')">Total Market Income</p></li>
+            <li><div id="togqsiEmploymentRect" class="rectangle"></div><p id="togqsiEmployment" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['4employment','money']);reset();help('back')">Total Employment Income</p></li>
+            <li><div id="togqsiGovernmentRect" class="rectangle"></div><p id="togqsiGovernment" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['4gov','money']);reset();help('back')">Total Government Transfer</p></li>
+            <li><div id="togqsiInsuranceRect" class="rectangle"></div><p id="togqsiInsurance" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['4ei','money']);reset();help('back')">Employee Insurance Benefit</p></li>
+            <li><div id="togqsiCOVIDRect" class="rectangle"></div><p id="togqsiCOVID" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['4covid','money']);reset();help('back')">COVID-19 Emergency Payment</p></li>
+          </ul>
+        </li>
+        <li class = "menu-item">
+          <div class="menuI">
+            <p id="togHousing" class="menuTopLabel" onclick="setEmCorrect();toggleBold(id);help('back')">Housing</p><span class="arrow-icon"></span>
+          </div>
+          <ul class="sub-menu">
+            <li><div id="togqHomePerRect" class="rectangle"></div><p id="togqHomePer" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['8owner','per']);reset();help('back')">Owner Rate</p></li>
+            <li><div id="togqRentPerRect" class="rectangle"></div><p id="togqRentPer" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['8renter','per']);reset();help('back')">Renter Rate</p></li>
+          </ul>
+        </li>
+        <li class = "menu-item">
+          <div class="menuI">
+            <p id="togCrisis" class="menuTopLabel" onclick="setEmCorrect();toggleBold(id);help('back')">Crisis Calls</p><span class="arrow-icon"></span>
+          </div>
+          <ul class="sub-menu">
+            <li><div id="togqODRect" class="rectangle"></div><p id="togqOD" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crisisOD','num']);reset();help('back')">Overdose Calls</p></li>
+            <li><div id="togqSuicideRect" class="rectangle"></div><p id="togqSuicide" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crisisSuicide','num']);reset();help('back')">Suicide-Related Calls</p></li>
+            <li><div id="togqCrisisRect" class="rectangle"></div><p id="togqCrisis" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crisisCrisis','num']);reset();help('back')">Crisis Calls</p></li>
+          </ul>
+        </li>
+        <li class = "menu-item">
+          <div class="menuI">
+            <p id="togCrime" class="menuTopLabel" onclick="setEmCorrect();toggleBold(id);help('back')">Crime</p><span class="arrow-icon"></span>
+          </div>
+          <ul class="sub-menu">
+            <li><div id="togqAssaultRect" class="rectangle"></div><p id="togqAssault" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeAssault','num']);reset();help('back')">Assault</p></li>
+            <li><div id="togqAutoTheftRect" class="rectangle"></div><p id="togqAutoTheft" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeAutoTheft','num']);reset();help('back')">Auto Theft</p></li>
+            <li><div id="togqBikeTheftRect" class="rectangle"></div><p id="togqBikeTheft" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeBikeTheft','num']);reset();help('back')">Bike Theft</p></li>
+            <li><div id="togqBandERect" class="rectangle"></div><p id="togqBandE" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeBandE','num']);reset();help('back')">Breaking & Entering</p></li>
+            <li><div id="togqHomicideRect" class="rectangle"></div><p id="togqHomicide" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeHomicide','dec']);reset();help('back')">Homicide</p></li>
+            <li><div id="togqRobberyRect" class="rectangle"></div><p id="togqRobbery" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeRobbery','num']);reset();help('back')">Robbery</p></li>
+            <li><div id="togqShootingRect" class="rectangle"></div><p id="togqShooting" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeShooting','num']);reset();help('back')">Shooting</p></li>
+            <li><div id="togqTheftMVRect" class="rectangle"></div><p id="togqTheftMV" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeTheftMV','num']);reset();help('back')">Theft From Motor Vehicle</p></li>
+            <li><div id="togqTheftRect" class="rectangle"></div><p id="togqTheft" class="menuLabel" onclick="animateRect(id);toggleBold(id);changeVariable(['crimeTheft','num']);reset();help('back')">Theft Over $5000</p></li>
+          </ul>
+        </li>
+      <!-- Add more menu items as needed -->
+    </ul>
+    </div>
+    
+    <!-- CRIME SLIDER -->
+    
+    <div id= "bottomBig">
+    <div id="yearPicker">
+      <div id="comYearText" style="display: flex";><b>Comparison Year</b></div>
+      <select id="yearSelect" style="display: block; background-color: #F0F0F0";>
+      </select>
+    </div>
+    <div class ="bottom-menu">
+    <div id="vertical-line" class="vertical-line"></div>
+    <div class = "ringL">
+    <div class="color-container">
+    <!-- COLOR PICKER-->
+    <label class = "pickerText" for="colorPicker"><b>Colour Scheme</b></label>
+    <input type="color" class="picker" id="colorPicker2" name="colorPicker" value="#ebebeb">
+    <input type="color" class="picker" id="colorPicker" name="colorPicker" value="#10986b">
+
+    <script>
+        const colorPicker = document.getElementById('colorPicker');
+        const selectedColor = document.getElementById('selectedColor');
+        const colorValue = document.getElementById('colorValue');
+
+        const colorPicker2 = document.getElementById('colorPicker2');
+        const selectedColor2 = document.getElementById('selectedColor2');
+        const colorValue2 = document.getElementById('colorValue2');
+
+        colorPicker.addEventListener('input', function() {
+            var chosenColor = colorPicker.value;
+            darkestColor = chosenColor;
+            counter = 1;
+            var color1 = parseInt(darkestColor[1] + darkestColor[2],16) + parseInt(darkestColor[3] + darkestColor[4],16) + parseInt(darkestColor[5] + darkestColor[6],16)
+            var color2 = parseInt(lightestColor[1] + lightestColor[2],16) + parseInt(lightestColor[3] + lightestColor[4],16) + parseInt(lightestColor[5] + lightestColor[6],16)
+            if (color1 <= color2) {circleColour = darkestColor} else {circleColour = lightestColor};
+            render();
+            graphRender(newRow,false,"color");
+        });
+
+        colorPicker2.addEventListener('input', function() {
+            var chosenColor = colorPicker2.value;
+            lightestColor = chosenColor;
+            counter = 1;
+            var color1 = parseInt(darkestColor[1] + darkestColor[2],16) + parseInt(darkestColor[3] + darkestColor[4],16) + parseInt(darkestColor[5] + darkestColor[6],16)
+            var color2 = parseInt(lightestColor[1] + lightestColor[2],16) + parseInt(lightestColor[3] + lightestColor[4],16) + parseInt(lightestColor[5] + lightestColor[6],16)
+            if (color1 <= color2) {circleColour = darkestColor} else {circleColour = lightestColor};
+            render();
+            graphRender(newRow,false,"color2");
+        });
+
+        document.getElementById("yearSelect").addEventListener("change", function() {
+          var text = document.getElementById("yearSelect").value;
+          defYear = document.getElementById("yearSelect").value
+          document.getElementById("catTitle").innerHTML = titleCheck + "<span class='small-text'> " + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Change Since " + defYear + "</span>";
+          render("crSlider");
+          graphRender("fast",false,"yearSlider");
+        });
+          
+    </script>
+    </div>
+    </div>
+    <div class = "ringR">
+    <div id="helpCon" class="helpContainer" onclick="help('')"><div class="helpText"><b>Help / About</b></div></div>
+    </div>
+    </div>
+  </div>
+    
+  </div>
+    <script>
+        // Add event listeners to show/hide sub-menus
+        document.addEventListener('DOMContentLoaded', function() {
+          var menuItems = document.querySelectorAll('.menu-item');
+
+          //menuItems.querySelectorAll('p').style.marginBlockEnd = "1em";
+      
+          menuItems.forEach(function(item) {
+
+            
+            item.addEventListener('click', function() {
+              var subMenu = this.querySelector('.sub-menu')
+              var arrowIcon = item.querySelector('.menuI').querySelector('.arrow-icon')
+              item.querySelector('.menuI').querySelector('p').style.marginBlockEnd = "0.2em";
+              item.querySelector('.menuI').querySelector('.arrow-icon').style.top = "4px";
+
+              closeAllSubMenus();
+              
+              // Toggle the visibility of the sub-menu
+              if (subMenu) {
+                subMenu.classList.toggle('open');
+                arrowIcon.classList.toggle('open');
+                event.stopPropagation();
+              }
+            });
+          });
+        });
+
+        // Function to close all open sub-menus
+        function closeAllSubMenus() {
+          var openSubMenus = document.querySelectorAll('.sub-menu.open');
+          openSubMenus.forEach(function(openSubMenu) {
+              openSubMenu.classList.remove('open');
+              //arrowIcon.classList.remove('open');
+          });
+
+          var openClass = document.querySelectorAll('.arrow-icon.open');
+          openClass.forEach(function(openClas) {
+              openClas.classList.remove('open');
+              //arrowIcon.classList.remove('open');
+          });
+        }
+
+        function openAllSubMenus() {
+          var openSubMenus = document.querySelectorAll('.sub-menu');
+          openSubMenus.forEach(function(openSubMenu) {
+              openSubMenu.classList.add('open');
+              //arrowIcon.classList.remove('open');
+          });
+
+          var openClass = document.querySelectorAll('.arrow-icon');
+          openClass.forEach(function(openClas) {
+              openClas.classList.add('open');
+              //arrowIcon.classList.remove('open');
+          });
+        }
+      </script>
+
+    <div>
+
+    <div class="headerTitle"><h2 id="titleTitle">Toronto Neighbourhood Data Map</h2></div>
+    <div><h1 id="catTitle" class="catTitle">Average Age of Population (2021)</h1></div>
+    <div><p id="catDesc" class="catDesc">Average age of population in neighbourhood.</p></div>
+    <div id="helperText">
+      <div><h1 id="aboutTitle" class="catTitle">About</h1></div>
+      <div><p id="aboutText" class="catDesc">Using open source data provided by the City of Toronto, this project is used to show differing trends among the neighbourhoods in the city. When available, historical data is also added onto the website.<br><br>For any inquires or questions please contact me <a href="https://www.linkedin.com/in/alex-quan-45134016b/">here</a>.<br><br>Hope you enjoy using this website and find use in the data.</p></div>
+      <div><h1 id="helpTitle" class="catTitle">Help</h1></div>
+      <div><p class="catDesc">To decide a <b>category</b> to view, select through the menu on the left side.<br><br></p></div>
+      <div><p class="catDesc">You are able to change the <b>color scheme</b> in the bottom-left of the screen. These two colors represent the two ends of the data presented.<br><br></p></div>
+      <div><p class="catDesc">When viewing the map, hover over a neighbourhood to view information about that neighbourhood. Hovering also shows a redline on the legend graph on the right side. The legend categorizes the data linearly by default (each legend color is a equal amount from the other). Hover over the legend to show how many neighbourhoods are in each legend category. For certain data it helps visualize it to view the data through the <b>percentile</b> view. This insures that each color in the legend has a equal amount of neighbourhoods on the screen.<br><br></p></div>
+      <div><p class="catDesc">When available, you can switch to view the <b>average</b> and <b>median</b> of the data.<br><br></p></div>
+      <div><p class="catDesc">For category data where enough historical data is available (crime / crisis), hover over the neighbourhood to view the trend of that demographic data over time. Use the slider bar under the graph to have the map show a specific year of data as well.<br><br></p></div>
+    </div>
+    
+
+    <div id="container">
+    <div class="wrapper"></div>
+    <!--
+    <div id="multiButton"><p onclick="multiView = !multiView;multipleView(multiView)">Multiple View</p></div>
+    -->
+    <script>
+        var mapWidth = 900;
+        var mapHeight = 700;
+
+        // To make sure legend stays in place
+        var mapWidthOffset = 900;
+
+        var totalWidth = mapWidth + 200;
+        var totalHeight = mapHeight;
+
+        // functions
+        var c10 = d3.scale.category10();
+
+        var projection = d3.geo.albers();
+
+        var data = d3.map();
+
+        var path = d3.geo.path()
+            .projection(projection);
+
+        var svg = d3.select(".wrapper").append("svg")
+            .attr("width", totalWidth)
+            .attr("height", totalHeight);
+
+        var mapLabel = svg.append("text")
+            .attr("y", 27)
+            .attr("x", 21)
+            .attr("class", "map_neighbourhood_name")
+            .attr("font-size", "18px")
+
+        var valueLabel = svg.append("text")
+            .attr("y", 52)
+            .attr("x", 21)
+            .attr("class", "map_neighbourhood_name")
+            .attr("font-size", "22px")
+            .style("font-weight", "bold");
+
+        var headLine = svg.append("line").attr("id","header")
+          .attr("x1",20)
+          .attr("x2",650)
+          .attr("y1",4)
+          .attr("y2",4)
+          .style("stroke", "#2e2e2e")
+          .style("stroke-width", 1);
+
+        var category = ["2averageAge",'dec']
+
+        var graphLine = d3.svg.line();
+
+        var graphData = [1,2,3,4,5,6,7,8,9,10]
+
+        var criYears = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+        var criText = svg.selectAll("texts")
+        .data(criYears)
+        .enter().append("text")
+        .attr("id", function(d, i) {
+          return "graph" + d;
+        })
+        .attr("x", function(d, i) {
+          return i * 36 + 63;
+        })
+        .attr("y",240)
+        .text(function(d) {return d;})
+        .style("font-size","12px")
+
+        var xLine = svg.append("line").attr("id","graph")
+          .attr("x1",56)
+          .attr("x2",420)
+          .attr("y1",220)
+          .attr("y2",220)
+          .style("stroke", "black")
+          .style("stroke-width", 1);
+        var maxLine = svg.append("line").attr("id","graph")
+          .attr("x1",56)
+          .attr("x2",64)
+          .attr("y1",120)
+          .attr("y2",120)
+          .style("stroke", "black")
+          .style("stroke-width", 1);
+        var yLine = svg.append("line").attr("id","graph")
+          .attr("x1",60)
+          .attr("x2",60)
+          .attr("y1",90)
+          .attr("y2",220)
+          .style("stroke", "black")
+          .style("stroke-width", 1);
+        svg.append("text")
+          .attr("id","graph")
+          .attr("x", 51)
+          .attr("y", 224)
+          .attr("text-anchor", "end")
+          .text("0")
+          .style("font-size","12px")
+        maxGraphText = svg.append("text")
+          .attr("id","graphTop")
+          .attr("x", 51)
+          .attr("y", 124)
+          .attr("text-anchor", "end")
+          .text("")
+          .style("font-size","12px")
+
+        hideGraph = svg.append("rect")
+          .attr("id","graph")
+          .attr("x",0)
+          .attr("y",70)
+          .attr("width",500)
+          .attr("height",400)
+          .attr("fill","white")
+          .attr("opacity",1)
+
+        // CRIME AND CRISIS GRAPH
+        function graphRender(row,newVar,par) {
+          if (runningFunc == false) {
+            runningFunc = true
+          // Animation Delay if selected from menu
+          if (row == "fast" || par == "allRenderDur") {
+            var delayLength = 0
+          } else if (newVar == true) {
+            var delayLength = 1450
+          } else {
+            var delayLength = 0
+          }
+
+          if (tSpan !== "") {
+            tSpan.remove();
+          }
+          if (row !== "" && row !== "fast") {
+            newRow = row
+            var circleData = graphPoints(criCat,newRow,par)[0]
+            var circleMax = graphPoints(criCat,newRow,par)[1]
+          }
+          d3.json("neighbourhoods-4326.json", function(error, toronto) {
+            if (error) throw error;
+            d3.csv("arc1.csv")
+            .get(function(error, data) {
+              if (error) {
+                console.error("Error loading CSV file:", error);
+              } else {
+                if (criToggle == true) {
+                  d3.select(".wrapper").select("svg").selectAll("circle#graph").remove()
+                  d3.select(".wrapper").select("svg").select("path#graph").remove()
+                  i = 0
+
+                  if (circleMax == 2500000) {maxGraphText.text("2.5 M")} else {maxGraphText.text(circleMax)}
+                  graphLineD = svg.append("path")
+                    .data([graphCoordinates(circleData)])
+                    .attr("id","graph")
+                    .attr("d", graphLine)
+                    .attr("fill", "none")
+                    .attr("stroke", "gray")
+                    .attr("stroke-width", "2px")
+                    .style("display","none");
+
+                  var circles = svg.selectAll("circle")
+                    .data(circleData)
+                    .enter().append("circle")
+                    .attr("id","graph")
+                    .attr("cx", function(d) {
+                      var currentI = i;
+                      i++;
+                      return currentI * 36 + 76; // 20 is added to center the circles
+                    })
+                    .attr("cy", function(d) {
+                      return(220 - d) // Vertical position
+                    })
+                    .attr("r", 6) // Radius of the circles
+                    .attr("fill", circleColour) // Circle color
+                    .style("display","none")
+                  
+
+                  graphLineD.transition()
+                    .delay(delayLength)
+                    .duration(250) // Animation duration in milliseconds
+                    .attrTween("d", function(d) {
+                        var interpolate = d3.scale.linear().domain([0, 1]).range([0, graphCoordinates(circleData).length]);
+                        return function(t) {
+                            return graphLine(graphCoordinates(circleData).slice(0, interpolate(t)));
+                        };
+                    })
+                    .style("display","block");
+
+                  if (mouseIn == true && row['NeighbourhoodNumber'] == "175") {
+                    i = 0
+                  } else {
+                    circles.transition()
+                    .delay(function(d, i) {
+                        return delayLength + i * (250 / 10);  // 500 milliseconds delay per circle
+                    })
+                    .duration(250/10)  // Animation duration for each circle
+                    .style("display","block");
+                  }
+
+                  
+
+                  if (criToggle === true) {
+                    //tSpan.remove();
+                    if (valueLabel.text().endsWith(")")) {
+                      valueLabel.text(valueLabel.text().slice(0, text.indexOf('(')))
+                    }
+
+                    const numberOfSpaces = 5;
+                    const spaces = Array(numberOfSpaces).fill("\u00A0").join("");
+
+                    if (counta == 0 && normalChange == 1) {
+
+                      if (normalChange == 0) {
+                        var changeVal = (100 * ((changeNum / preChangeVal) - 1))
+                      } else {
+                        var changeVal = (100 * (changeNum - 1))
+                      }
+
+                      tSpan = valueLabel.append("tspan")
+                        .text(function() {
+                          if (medianToggle == 2) {
+                            if (isNaN(changeVal)) {
+                              return spaces;
+                            } else if (changeVal == 0) {
+                              return spaces;
+                            } {
+                              if (normalChange == 0) {
+                                return spaces + Math.abs(changeVal.toFixed(2)) + "%";
+                              } else {
+                                return spaces + Math.abs(changeVal.toFixed(2)) + "%";
+                              }
+                            }
+                          }                      })
+                        .style("font-size", "18px")
+                        // .style("fill", function(d) {
+                        //   if (changeVal > 0) {
+                        //       return "green"
+                        //     } else {
+                        //       return "red"
+                        //     }
+                        // })
+                        .append("tspan")
+                        .text(function() {
+                          if (medianToggle == 2) {
+                            if (isNaN(changeVal)) {
+                              return " No change since " + defYear + "."
+                            } else {
+                              if (category[0] == 'totPop') {
+                                if ((changeVal - 1) > 0) {
+                                  return " increase since " + defYear + " (" + parseFloat(preChangeVal).toFixed(0) + ")"
+                                } else if (changeVal < 0) {
+                                  return " decrease since " + defYear + " (" + parseFloat(preChangeVal).toFixed(0) + ")"
+                                } else {
+                                  return " No change since " + defYear + "."
+                                }
+                              } else {
+                                if ((changeVal - 1) > 0) {
+                                  return " increase since " + defYear + " (" + parseFloat(preChangeVal).toFixed(2) + ")"
+                                } else if (changeVal < 0) {
+                                  return " decrease since " + defYear + " (" + parseFloat(preChangeVal).toFixed(2) + ")"
+                                } else {
+                                  return " No change since " + defYear + "."
+                                }
+                              }
+                            }
+                          } })
+                      .style("font-size", "16px")
+                      .style("fill", "black")
+
+                        counta = 1
+
+                    }
+                  }
+                }
+
+              }
+            })
+          })
+          runningFunc = false
+        }
+      
+        }
+
+        
+        
+        // load TopoJSON file
+        function render(passIn = "normal") {
+
+          // Year Select Options
+          if (criToggle == true) {
+            var defaultYear = document.getElementById('yearSelect').value
+
+            document.getElementById('yearSelect').innerHTML = '';
+            for (var i = 2014; i < Math.round(ageSlider1); i++) {
+              var option = document.createElement('option');
+              option.value = i;
+              option.textContent = i;
+              document.getElementById('yearSelect').appendChild(option);
+            }
+            
+            if (defYear == 2013 && Math.round(ageSlider1) == 2015) {
+              document.getElementById('yearSelect').value = 2014
+              defYear = 2014
+            } else if (defYear >= Math.round(ageSlider1)) {
+              document.getElementById('yearSelect').value = Math.round(ageSlider1) - 1
+              defYear = Math.round(ageSlider1) - 1
+            } else {
+              document.getElementById('yearSelect').value = defYear;
+            }
+          }
+
+          if (passIn !== "criSlider" && passIn !== "crySlider" && passIn !== "crSlider") {
+            toggleDropdown("off")
+          }
+          mouseoverOff = false
+          d3.select("body").selectAll("line#lineInd").style("display","none")    
+          var boldYear = document.getElementById("graph" + Math.round(ageSlider1))
+          if (boldYear) {
+            var allElem = document.querySelectorAll('[id^="graph20"]');
+            allElem.forEach(function(element) {
+              element.style.fontWeight = "normal";
+            });
+            // Make the text bold
+            boldYear.style.fontWeight = "bold";
+          } else {
+            console.error("Element not found!");
+          }
+
+        // SLIDER TITLE CHANGE
+        if (isFirstChange1 === false) {
+          if (criToggle === true) {
+            if (ageSlider1 === ageSlider2) {
+              if (normalChange == 0) {
+                document.getElementById("catTitle").textContent = document.getElementById("catTitle").textContent.slice(0, document.getElementById("catTitle").textContent.indexOf('(')) + "(" + Math.round(ageSlider1) + ")"
+              } else {
+                document.getElementById("catTitle").innerHTML = titleCheck + "<span class='small-text'> " + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Change Since " + defYear + "</span>";
+              }
+              criYearString = " (" + Math.round(ageSlider1) + ")"
+              if (document.getElementById("catDesc").textContent.startsWith("Average")) {
+                document.getElementById("catDesc").textContent = "N" + document.getElementById("catDesc").textContent.slice(9, - 10) + "."
+              }
+            } else {
+              document.getElementById("catTitle").textContent = document.getElementById("catTitle").textContent.slice(0, document.getElementById("catTitle").textContent.indexOf('(')) + "(" + Math.round(ageSlider1) + " - " + Math.round(ageSlider2) + ")"
+              criYearString = " (" + Math.round(ageSlider1) + " - " + Math.round(ageSlider2) + ")"
+              if (!document.getElementById("catDesc").textContent.startsWith("Average")) {
+                document.getElementById("catDesc").textContent = "Average n" + document.getElementById("catDesc").textContent.slice(1, - 1) + " per year."
+              }
+            }
+          }
+        }
+
+        d3.json("neighbourhoods-4326.json", function(error, toronto) {
+          if (error) throw error;
+
+          var arrr = [400,600,800,1000,1200,1400];
+              var resulte = [];
+              
+              resulte = findBucketIndex(arrr, 1300)
+
+          var arc;
+
+          d3.csv("arc1.csv")
+            .get(function(error, data) {
+                if (error) {
+                    console.error("Error loading CSV file:", error);
+                } else {
+          d3.csv("avg.csv")
+            .get(function(error, avg) {
+                if (error) {
+                    console.error("Error loading CSV file:", error);
+                } else {
+          
+                    // Call a function to process the data or perform other actions
+                    arc = data;
+                    processData(data);
+
+                    var firstRow = data[0];
+
+                    // Extract keys (column names) from the first row
+                    var columnNames = Object.keys(firstRow);
+
+          var newCat = ""
+
+          newCat = category[0]
+
+          if (category[0]==='crimeAssault') {newCat = "ASSAULT_RATE_"}
+          if (category[0]==='crimeAutoTheft') {newCat = "AUTOTHEFT_RATE_"}
+          if (category[0]==='crimeBikeTheft') {newCat = "BIKETHEFT_RATE_"}
+          if (category[0]==='crimeBandE') {newCat = "BREAKENTER_RATE_"}
+          if (category[0]==='crimeHomicide') {newCat = "HOMICIDE_RATE_"}
+          if (category[0]==='crimeRobbery') {newCat = "ROBBERY_RATE_"}
+          if (category[0]==='crimeShooting') {newCat = "SHOOTING_RATE_"}
+          if (category[0]==='crimeTheftMV') {newCat = "THEFTFROMMV_RATE_"}
+          if (category[0]==='crimeTheft') {newCat = "THEFTOVER_RATE_"}
+          if (category[0]==='crisisOD') {newCat = "OVERDOSE_"}
+          if (category[0]==='crisisSuicide') {newCat = "SUICIDE_"}
+          if (category[0]==='crisisCrisis') {newCat = "CRISIS_"}
+          if (category[0]==='totPop') {newCat = "POPULATION_"}
+
+
+          if (category[0]==='tempPop') {
+            const columnsToSum = ageSum(selectedValues[0],selectedValues[1])
+              // Iterate through each row in the dataset
+              data.forEach(function(d) {
+                // Calculate the sum of the specified columns
+                d.totalScore = columnsToSum.reduce(function(sum, column) {
+                  return sum + +d[column]; // The '+' is used to convert the string to a number
+                }, 0);
+                d.tempPop = d.totalScore / +d['1atotalPop'];
+              });
+          }
+
+                    
+          catStart = criCat + defYear
+          if (normalChange == 1) {
+            var selectedRow = avg.find(function(row) {
+                return row.NeighbourhoodNumber === "175";
+                });
+            pastData = selectedRow[catStart];
+          }
+
+          var normalize = 0
+
+          if (criToggle === true) {
+            criCat = newCat
+            if (ageSliderLength === 0) {
+              newCat = criCat + Math.round(ageSlider1)
+              crimeCat = criCat + Math.round(ageSlider1)
+              curCat = newCat
+
+              if (normalChange == 1) {
+                data.forEach(function(d) {
+
+                  if (criCat == "HOMICIDE_RATE_") {normalize = 1};
+                  if (criCat == "BIKETHEFT_RATE_") {normalize = 1};
+                  if (criCat == "SHOOTING_RATE_") {normalize = 1};
+                  if (criCat == "THEFTOVER_RATE_") {normalize = 1};
+                  if (criCat == "OVERDOSE_") {normalize = 1};
+                  if (criCat == "ROBBERY_RATE_") {normalize = 1};
+
+                  d.change = (d[curCat] + normalize) / (d[catStart] + normalize);
+                  displayCat = "change"
+                });}
+              else {
+                displayCat = crimeCat
+              }
+            } else {
+              criColumns = []
+              var ageStart = ageSlider1
+              while (parseInt(ageStart) <= parseInt(ageSlider2)) {
+                criColumns.push(criCat + Math.round(ageStart))
+                ageStart = (parseInt(ageStart) + 1).toString()
+              }
+              data.forEach(function(d) {
+                // Calculate the average of the specified columns
+                var criAvg = criColumns.reduce(function(sum, column) {
+                  return sum + +d[column];
+                }, 0) / criColumns.length; // Divide by the count of columns
+
+                d[criCat] = criAvg
+              });
+
+              
+            }
+          } else {
+            displayCat = newCat
+          }
+
+          var dataMap = d3.map(data, function(d) {
+                return d.NeighbourhoodNumber; // Replace with your actual identifier
+            });
+
+          // load CSV
+          //d3.csv("arc1.csv", function(csvData) {
+          //  processData(toronto, csvData);
+          //});
+
+          var neighbourhoods = topojson.feature(toronto, toronto.objects.toronto); 
+
+          projection
+              .scale(1)
+              .translate([w,h]);
+
+          var b = path.bounds(neighbourhoods),
+              s = .95 / Math.max((b[1][0] - b[0][0]) / mapWidth, (b[1][1] - b[0][1]) / mapHeight),
+              t = [(mapWidth - s * (b[1][0] + b[0][0])) / 2, (mapHeight - s * (b[1][1] + b[0][1])) / 2];
+
+          projection
+          .scale(s)
+          .translate(t);
+          // set project with bounding box data
+
+            if (normalChange == 0) {
+              var minVal = d3.min(data, function(d) { return +d[displayCat]; })
+              var maxVal = d3.max(data, function(d) { return +d[displayCat]; })
+            } else {
+              var minVal = d3.min(data, function(d) { return +d["change"]; }) - 1
+              var maxVal = d3.max(data, function(d) { return +d["change"]; }) - 1
+            }
+
+            var colorScale = d3.scale.quantize()
+                .domain([minVal, maxVal])
+                .range(generateColorGradient(lightestColor, darkestColor, 10));
+
+            var colorScaleMap = d3.scale.quantize()
+              .domain([1, 10])
+              .range(generateColorGradient(lightestColor, darkestColor, 10));
+
+            var result = [];
+            if (normalChange == 0) {
+              var valuesArr = data.map(function(d) {
+                  return +d[displayCat]; // Convert the value to a number
+              });
+            } else {
+              var valuesArr = data.map(function(d) {
+                  return +d["change"] - 1; // Convert the value to a number
+              });
+            }
+
+            var va = arrBuckets(valuesArr)
+
+            var colorScaleRect = d3.scale.ordinal().range(generateColorGradient(lightestColor, darkestColor, 10));
+
+            // LEGEND
+            var x = 10; // Number of rectangles
+            var rectWidth = 30; 
+            var rectHeight = 40; // Height of each rectangle
+            var lineThickness = 1;
+
+            if (criToggle == true) {
+              var selectedRow = avg.find(function(row) {
+              return row.NeighbourhoodNumber === "175";
+              });
+              if (noRender == false) {
+                if (passIn == "crSlider") {
+                  graphRender(selectedRow,true,"allRenderDur");
+                } else {
+                  graphRender(selectedRow,true,"allRender");
+                }
+              } else {
+                graphRender(selectedRow,false,"allRender2");
+                noRender = false
+              }
+              mapLabel.text("Toronto (City Average)")
+              var regionData = selectedRow[crimeCat];
+              mouseover(avg, regionData, true)
+            }
+            
+
+
+            if (counter===0) {
+
+              var text = svg.append("text")
+                .attr("x",130+mapWidthOffset)
+                .attr("y",515)
+                .text("Switch to Percentile")
+                .attr("id","button")
+                .attr("text-anchor", "end")
+                .style("cursor", "pointer") 
+                .style("font-size", "16px")
+                .style("text-decoration", "underline")
+                .on("click", function() {
+                  counter = 1
+                  if (order === "linear") {
+                    order = "equal"
+                    text.text("Switch to Linear")
+                    toggleCheckbox1.checked = !toggleCheckbox1.checked;
+                  } else {
+                    order = "linear"
+                    text.text("Switch to Percentile")
+                    toggleCheckbox1.checked = !toggleCheckbox1.checked;
+                  }
+                  noRender = true
+                  render("crySlider");
+                  graphRender("fast",false,"linearEqual");
+                })
+
+              var averageMedianText = svg.append("text")
+                .attr("x",130+mapWidthOffset)
+                .attr("y",535)
+                .text("Switch to Median")
+                .attr("id","buttonMedian")
+                .attr("text-anchor", "end")
+                .style("cursor", "pointer") 
+                .style("font-size", "16px")
+                .style("text-decoration", "underline")
+                .on("click", function() {
+                  counter = 1
+                  if (medianToggle == true) {
+                    if (averageMedian === 0) {
+                      averageMedian = 1
+                      averageMedianText.text("Switch to Average")
+                      toggleCheckbox2.checked = !toggleCheckbox2.checked;
+                      noRender = true
+                      changeVariable([displayCat + 'M',category[1]])
+                    } else {
+                      averageMedian = 0
+                      averageMedianText.text("Switch to Median")
+                      toggleCheckbox2.checked = !toggleCheckbox2.checked;
+                      noRender = true
+                      changeVariable([displayCat.slice(0, -1),category[1]])
+                    }
+                  }
+                  if (medianToggle == 2) {
+                    if (normalChange === 0) {
+                      normalChange = 1
+                      averageMedianText.text("Switch to Number View")
+                      toggleCheckbox2.checked = !toggleCheckbox2.checked;
+                      noRender = true
+                      render()
+                      toggleDropdown("on")
+                      document.getElementById("catTitle").innerHTML = titleCheck + "<span class='small-text'> " + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Change Since " + defYear + "</span>";
+                      // changeVariable([category[0] + 'M',category[1]])
+                    } else {
+                      normalChange = 0
+                      averageMedianText.text("View Percentage Change Over Time")
+                      toggleCheckbox2.checked = !toggleCheckbox2.checked;
+                      noRender = true
+                      render()
+                      toggleDropdown("off")
+                      document.getElementById("catTitle").textContent = titleCheck
+                      // changeVariable([category[0].slice(0, -1),category[1]])
+                    }
+                  }
+                })
+
+              var source = svg.append("text")
+                .attr("x",130+mapWidthOffset)
+                .attr("y",555)
+                .text("View Data Source")
+                .attr("text-anchor", "end")
+                .attr("id", "source")
+                .style("cursor", "pointer") 
+                .style("font-size", "16px")
+                .style("text-decoration", "underline")
+                .on("click", function() {
+                  window.open(dataSource, '_blank');
+                })
+
+              var ranges = [];
+
+
+              svg.selectAll("rect#leg")
+                .data(d3.range(x))
+                .enter().append("rect")
+                .attr("id","leg")
+                .attr("x", 120+mapWidthOffset)
+                .attr("y", function(d, i) { return ((10 - i) * rectHeight) + 40; })
+                .attr("width", 20) // Width of each rectangle
+                .attr("height", rectHeight)
+                .style("fill", function(d, i) { 
+                  return colorScaleRect(i); });
+
+              var percentileLabel = svg.selectAll("percentile")
+                .data(d3.range(x + 1)) 
+                .enter().append("text")
+                .attr("id","percentile")
+                .attr("x", 145+mapWidthOffset)
+                .attr("y", function(d, i) { return ((i + 1) * rectHeight) + 44; })
+                .style("font-size", "12px")
+                .style("fill", "#30302e")
+                .text(function(d, i) {
+                    return (100 - (i * 10)) + "th";
+                  })
+                .style("display", "none")
+                .attr("opacity", 0)
+
+              var percentileText = svg.selectAll("percentileText")
+                .data([0])
+                .enter().append("text")
+                .attr("id","percentile")
+                .attr("x",178+mapWidthOffset)
+                .attr("y",252)
+                .attr("font-weight", "bold")
+                .attr("transform", "rotate(90,1078,252)")
+                .style("font-size", "16px")
+                .text("Percentile")
+                .style("display", "block")
+                .attr("opacity", 0)
+
+              svg.selectAll("textBar")
+                .data(d3.range(x + 1)) // One less line than rectangles
+                .enter().append("text")
+                .attr("class", "textBar")
+                .attr("text-anchor", "end")
+                .attr("x", 100+mapWidthOffset)
+                .attr("y", function(d, i) { return ((i + 1) * rectHeight) + 44; })
+                .style("font-size", "13px")
+                .text(function(d, i) { 
+                  if (normalChange == 1) {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return ((minVal + ((x - i) * ((maxVal - minVal) / 10))) * 100).toFixed(2) + "%"
+                    } else if (order === "equal") {
+                      return ((va[10-i]) * 100).toFixed(2) + "%"
+                    }
+                  } else if (category[1]==='num') {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return Math.round(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    } else if (order === "equal") {
+                      return Math.round(va[10-i])
+                    }
+                  } else if (category[1]==='dec') {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return Math.round(10 * (minVal + ((x - i) * ((maxVal - minVal) / 10)))) / 10;
+                    } else if (order === "equal") {
+                      return Math.round(10 * (va[10-i])) / 10
+                    }
+                  } else if (category[1]==='per') {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return ((minVal + ((x - i) * ((maxVal - minVal) / 10))) * 100).toFixed(1) + "%"
+                    } else if (order === "equal") {
+                      return ((va[10-i]) * 100).toFixed(1) + "%"
+                    }
+                  } else if (category[1]==='money') {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return (minVal + ((x - i) * ((maxVal - minVal) / 10))).toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                      });
+                    } else if (order === "equal") {
+                      return va[10-i].toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                      });
+                    }
+                  }});
+
+
+              var labelArea = svg.selectAll("rectlabel")
+                .data([0])
+                .enter()
+                .append("rect")
+                .attr("id","label")
+                .attr("x",920)
+                .attr("y",80)
+                .attr("width",160)
+                .attr("height",400)
+                .attr("fill","white")
+                .attr("opacity",0);
+
+              var result = [];
+              if (normalChange == 0) {
+                var valuesArr = data.map(function(d) {
+                    return +d[displayCat]; // Convert the value to a number
+                });
+              } else {
+                var valuesArr = data.map(function(d) {
+                    return +d["change"] - 1; // Convert the value to a number
+                });
+              }
+              
+              result = countNumbersInBuckets(ranges, valuesArr)
+              legendLength = result.slice(0,10);
+              legendMax = Math.max(...legendLength)
+
+              svg.selectAll("lind")
+                .data(d3.range(x + 1)) // One less line than rectangles
+                .enter().append("line")
+                .attr("x1", 110+mapWidthOffset)
+                .attr("y1", function(d, i) { return ((i + 1) * rectHeight) + 40; })
+                .attr("x2", rectWidth + 110+mapWidthOffset)
+                .attr("y2", function(d, i) { return ((i + 1) * rectHeight) + 40; })
+                .style("stroke", "grey")
+                .style("stroke-width", lineThickness);
+
+              var lineInd = svg.append("line")
+                .attr("x1", 115+mapWidthOffset)
+                .attr("y1", 480)
+                .attr("x2", rectWidth + 110+mapWidthOffset)
+                .attr("y2", 480)
+                .style("stroke", "red")
+                .style("stroke-width", 2)
+                .style("display", "none");
+
+
+            } else {
+              if (category[0] == "tempPop" || category[0] == "8owner" || category[0] == "8renter") {
+                svg.selectAll("#source").attr("y",535);
+              } else {
+                svg.selectAll("#source").attr("y",555);
+              }
+              
+              var svg2 = d3.select("svg#leg");
+              //var svg2 = d3.select("body")
+              d3.select("body").selectAll(".textBar")
+                .text("")
+              
+              if (order === "linear") {
+                d3.selectAll("body").selectAll("svg").selectAll("text#percentile")
+                .transition().duration(400).attr("opacity", 0)
+                .transition().duration(400).style("display","none")
+                d3.selectAll("body").selectAll("svg").selectAll("text#percentileText")
+                .transition().duration(400).attr("opacity", 0)
+                .transition().duration(400).style("display","none")
+              } else if (order === "equal") {
+                d3.selectAll("body").selectAll("svg").selectAll("text#percentile")
+                .style("display","block")
+                .transition().duration(400).attr("opacity", 1)
+                .transition().duration(400).style("display","block")
+                d3.selectAll("body").selectAll("svg").selectAll("text#percentileText")
+                .style("display","block")
+                .transition().duration(400).attr("opacity", 1)
+              }
+
+              if (medianToggle === false) {
+                svg.selectAll("text#buttonMedian").style("display", "none");
+                toggle2.style.display = "none";
+              } else {
+                svg.selectAll("text#buttonMedian").style("display", "block");
+                toggle2.style.display = "block";
+              }
+
+              var ranges = [];
+
+              var lineInd = svg.append("line")
+                .attr("x1", 115+mapWidthOffset)
+                .attr("y1", 480)
+                .attr("x2", rectWidth + 110+mapWidthOffset)
+                .attr("y2", 480)
+                .attr("id", "lineInd")
+                .style("stroke", "red")
+                .style("stroke-width", 2)
+                .style("display", "none");
+
+              svg.selectAll("rect#leg")
+                .data(d3.range(x))
+                .attr("x", 120+mapWidthOffset)
+                .attr("y", function(d, i) { return ((10 - i) * rectHeight) + 40; })
+                .attr("width", 20) // Width of each rectangle
+                .attr("height", rectHeight)
+                .style("fill", function(d, i) {
+                  return colorScaleRect(i); });
+
+              var se = d3.select("body").selectAll(".textBar")// One less line than rectangles
+                .data(d3.range(x + 1))
+                .attr("text-anchor", "end")
+                .attr("x", 100+mapWidthOffset)
+                .attr("y", function(d, i) { return ((i + 1) * rectHeight) + 44; })
+                .style("font-size", "13px")
+                .text(function(d, i) { 
+                  if (normalChange == 1) {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return ((minVal + ((x - i) * ((maxVal - minVal) / 10))) * 100).toFixed(2) + "%"
+                    } else if (order === "equal") {
+                      return ((va[10-i]) * 100).toFixed(2) + "%"
+                    }
+                  } else if (category[1]==='num') {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return Math.round(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    } else if (order === "equal") {
+                      return Math.round(va[10-i])
+                    }
+                  } else if (category[1]==='dec') {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return Math.round(10 * (minVal + ((x - i) * ((maxVal - minVal) / 10)))) / 10;
+                    } else if (order === "equal") {
+                      return Math.round(10 * (va[10-i])) / 10
+                    }
+                  } else if (category[1]==='per') {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return ((minVal + ((x - i) * ((maxVal - minVal) / 10))) * 100).toFixed(1) + "%"
+                    } else if (order === "equal") {
+                      return ((va[10-i]) * 100).toFixed(1) + "%"
+                    }
+                  } else if (category[1]==='money') {
+                    ranges.unshift(minVal + ((x - i) * ((maxVal - minVal) / 10)))
+                    if (order === "linear") {
+                      return (minVal + ((x - i) * ((maxVal - minVal) / 10))).toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                      });
+                    } else if (order === "equal") {
+                      return va[10-i].toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 0
+                      });
+                    }
+                  }});
+
+                  var result = [];
+                  if (normalChange == 0) {
+                    var valuesArr = data.map(function(d) {
+                        return +d[displayCat]; // Convert the value to a number
+                    });
+                  } else {
+                    var valuesArr = data.map(function(d) {
+                        return +d["change"] - 1; // Convert the value to a number
+                    });
+                  }
+                  
+                  result = countNumbersInBuckets(ranges, valuesArr)
+                  legendLength = result.slice(0,10);
+                  legendMax = Math.max(...legendLength)
+            }
+
+            svg.selectAll("rect#label").on("mouseover", function() {
+              if (order === "linear") {
+                  svg.selectAll("rect#leg")
+                  .data(legendLength)
+                  .transition().duration(1000)
+                  .attr("width", function(d,i) {
+                    //console.log((d / legendMax) * 90)
+                    return (d / legendMax) * 90
+                  })
+                  .attr("x", function(d,i) {
+                    return 140+mapWidthOffset - ((d / legendMax) * 90)
+                  })
+                }
+              });
+
+            svg.selectAll("rect#label").on("mouseout", function() {
+              svg.selectAll("rect#leg")
+              .data(legendLength)
+              .transition().duration(1000)
+              .attr("width", 20)
+              .attr("x",120+mapWidthOffset)
+            });
+
+            
+            
+            //MAP
+            if (counter===0) {
+              // get individual neighbourhoods
+              svg.selectAll("path")
+                    .data(neighbourhoods.features)
+                .enter().append("path")
+                    //.attr("class", "map_neighbourhood")
+                    .attr("d", path)
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 1)
+                    .attr("id", function(d) {
+                        return d.id; // Assuming 'id' is the property you want to associate with each path
+                    })
+                    .attr("fill", function(d, i) { 
+                        if (normalChange == 0) {
+                          var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[displayCat];
+                        } else {
+                          var regionData = dataMap.get(d.properties.AREA_LONG_CODE)["change"] - 1;
+                        }
+
+                        if (order === "linear") {
+                          return colorScale(regionData);
+                        } else if (order === "equal") {
+                          return colorScaleMap(mapNumberToRange(regionData,va));
+                        }
+                      })
+                        //return va[10-i];})
+                    .on("mouseover", function(d) {
+                        if (mouseoverOff == false) {
+                          counta = 0
+                          var selectedRow = data.find(function(row) {
+                            return row.NeighbourhoodNumber === dataMap.get(d.properties.AREA_LONG_CODE)["NeighbourhoodNumber"];
+                          });
+                          graphRender(selectedRow,false,"mouseover1");
+                          var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[displayCat];
+                          if (criToggle == true) {
+                            var per = (((regionData / dataMap.get(d.properties.AREA_LONG_CODE)[catStart]) * 100) - 100)
+                            var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[crimeCat];
+                            changeNum = dataMap.get(d.properties.AREA_LONG_CODE)[displayCat];
+                            preChangeVal = dataMap.get(d.properties.AREA_LONG_CODE)[catStart];
+                          }
+                          d3.select(this)
+                          .attr("fill","rgb(24,41,77)")
+                          .attr("stroke", "#E7E7E7")
+                          .attr("stroke-width", 3)
+                          mouseover(d, regionData, false)
+                          if (normalChange == 1) {
+                            if (order == "linear") {
+                              lineInd
+                              .style("display", "block")
+                              .transition().duration((2.5*Math.abs((480 - (400 * ((changeNum - minVal) / (maxVal - minVal)))) - (lineInd.attr("y1")))))
+                              .attr("y1",480 - (400 * (((changeNum - 1) - minVal) / (maxVal - minVal))))
+                              .attr("y2",480 - (400 * (((changeNum - 1) - minVal) / (maxVal - minVal))))
+                            } else {
+                              lineInd
+                              .style("display", "block")
+                              .transition().duration((2.5*Math.abs((480 - (400 * ((changeNum - minVal) / (maxVal - minVal)))) - (lineInd.attr("y1")))))
+                              .attr("y1",480 - (400 * (approximatelyEqual((changeNum - 1), valuesArr, 1e-10) / (valuesArr.length - 1))))
+                              .attr("y2",480 - (400 * (approximatelyEqual((changeNum - 1), valuesArr, 1e-10) / (valuesArr.length - 1))))
+                            }
+                          } else if (order === "linear") {
+                            lineInd
+                            .style("display", "block")
+                            .transition().duration((2.5*Math.abs((480 - (400 * ((regionData - minVal) / (maxVal - minVal)))) - (lineInd.attr("y1")))))
+                            .attr("y1",480 - (400 * ((regionData - minVal) / (maxVal - minVal))))
+                            .attr("y2",480 - (400 * ((regionData - minVal) / (maxVal - minVal))))
+                          } else {
+                            lineInd
+                            .style("display", "block")
+                            .transition().duration((2.5*Math.abs((480 - (400 * ((regionData - minVal) / (maxVal - minVal)))) - (lineInd.attr("y1")))))
+                            .attr("y1",480 - (400 * (approximatelyEqual(regionData, valuesArr, 1e-10) / (valuesArr.length - 1))))
+                            .attr("y2",480 - (400 * (approximatelyEqual(regionData, valuesArr, 1e-10) / (valuesArr.length - 1))))
+                          }
+                          //this.parentNode.appendChild(this);
+                        }
+                    }) 
+                    .on("mouseout", function(d) {
+                        if (mouseoverOff == false) {
+                          if (normalChange == 0) {
+                            var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[displayCat];
+                          } else {
+                            var regionData = dataMap.get(d.properties.AREA_LONG_CODE)["change"] - 1;
+                          }
+                          d3.select(this)
+                          .attr("fill", colorScale(regionData))
+                          .attr("stroke", "#fff")
+                          .attr("stroke-width", 1);
+                          mouseout(d);
+                          lineInd
+                          .style("display", "none");
+                          d3.select(".wrapper").select("svg").select("path#graph").remove()
+                          d3.select(".wrapper").select("svg").selectAll("circle#graph").remove()
+
+                          if (criToggle == true) {
+                            var selectedRow = avg.find(function(row) {
+                            return row.NeighbourhoodNumber === "175";
+                            });
+                            mapLabel.text("Toronto (City Average)")
+                            var regionData = selectedRow[displayCat];
+                            graphRender(selectedRow,false,"mouseout1");
+                            mouseover(avg, regionData, false)
+                          }
+                        }
+                    })
+
+                  //svg.selectAll("path").on("mouseover",console.log("out"));
+                  
+
+                } else {
+
+            if (sliderOn==true) {
+              var duration = 150
+            } else if (passIn=="criSlider") {
+              var duration = 150
+            } else {
+              var duration = 1500
+            }
+
+            svg.selectAll("path")
+                    .data(neighbourhoods.features).transition().duration(duration)
+                    //.attr("class", "map_neighbourhood")
+                    .attr("d", path)
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 1)
+                    .attr("fill", function(d, i) { 
+                        //console.log(d.properties.AREA_LONG_CODE + " " + data[i]["Population"]);
+                        if (normalChange == 0) {
+                          var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[displayCat];
+                        } else {
+                          var regionData = dataMap.get(d.properties.AREA_LONG_CODE)["change"] - 1;
+                        }
+
+                        
+                        if (order === "linear") {
+                          return colorScale(regionData);
+                        } else if (order === "equal") {
+                          return colorScaleMap(mapNumberToRange(regionData,va));
+                        } });
+            
+            svg.selectAll("path")
+                    .data(neighbourhoods.features)  
+                    .attr("id", function(d) {
+                        return d.id; // Assuming 'id' is the property you want to associate with each path
+                    })          
+                    .on("mouseover", function(d) {
+                      counta = 0
+                        if (mouseoverOff == false) {
+                          mouseIn = true
+                          var selectedRow = data.find(function(row) {
+                            return row.NeighbourhoodNumber === dataMap.get(d.properties.AREA_LONG_CODE)["NeighbourhoodNumber"];
+                          });
+                          graphRender(selectedRow,false,"mouseover2");
+                          var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[displayCat];
+                          if (criToggle == true) {
+                            var per = (((regionData / dataMap.get(d.properties.AREA_LONG_CODE)[catStart]) * 100) - 100)
+                            var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[crimeCat];
+                            changeNum = dataMap.get(d.properties.AREA_LONG_CODE)[displayCat];
+                            preChangeVal = dataMap.get(d.properties.AREA_LONG_CODE)[catStart];
+                          }
+                          var bucket = findBucketIndex(ranges, regionData)
+                          var bucketVa = findBucketIndex(va, regionData)
+                          valuesArr = valuesArr.slice().sort(function (a, b) {
+                              return a - b;
+                          });
+                          d3.select(this)
+                          .attr("fill","rgb(24,41,77)")
+                          .attr("stroke", "#E7E7E7")
+                          .attr("stroke-width", 3)
+                          mouseover(d, regionData, false)
+                          if (normalChange == 1) {
+                            if (order == "linear") {
+                              lineInd
+                              .style("display", "block")
+                              .transition().duration((2.5*Math.abs((480 - (400 * ((changeNum - minVal) / (maxVal - minVal)))) - (lineInd.attr("y1")))))
+                              .attr("y1",480 - (400 * (((changeNum - 1) - minVal) / (maxVal - minVal))))
+                              .attr("y2",480 - (400 * (((changeNum - 1) - minVal) / (maxVal - minVal))))
+                            } else {
+                              lineInd
+                              .style("display", "block")
+                              .transition().duration((2.5*Math.abs((480 - (400 * ((changeNum - minVal) / (maxVal - minVal)))) - (lineInd.attr("y1")))))
+                              .attr("y1",480 - (400 * (approximatelyEqual((changeNum-1), valuesArr, 1e-10) / (valuesArr.length - 1))))
+                              .attr("y2",480 - (400 * (approximatelyEqual((changeNum-1), valuesArr, 1e-10) / (valuesArr.length - 1))))
+                            }
+                          } else if (order === "linear") {
+                            lineInd
+                            .style("display", "block")
+                            .transition().duration((2.5*Math.abs((480 - (400 * ((regionData - minVal) / (maxVal - minVal)))) - (lineInd.attr("y1")))))
+                            .attr("y1",480 - (400 * ((regionData - minVal) / (maxVal - minVal))))
+                            .attr("y2",480 - (400 * ((regionData - minVal) / (maxVal - minVal))))
+                          } else {
+                            lineInd
+                            .style("display", "block")
+                            .transition().duration((2.5*Math.abs((480 - (400 * ((regionData - minVal) / (maxVal - minVal)))) - (lineInd.attr("y1")))))
+                            .attr("y1",480 - (400 * (approximatelyEqual(regionData, valuesArr, 1e-10) / (valuesArr.length - 1))))
+                            .attr("y2",480 - (400 * (approximatelyEqual(regionData, valuesArr, 1e-10) / (valuesArr.length - 1))))
+                          }
+                          //this.parentNode.appendChild(this);
+                        }
+                    }) 
+                    
+                    .on("mouseout", function(d) {
+                        if (mouseoverOff == false) {
+                          mouseIn = false
+                          if (normalChange == 0) {
+                            var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[displayCat];
+                          } else {
+                            var regionData = dataMap.get(d.properties.AREA_LONG_CODE)["change"] - 1;
+                          }
+                          d3.select(this)
+                          .attr("fill", function(d) {
+                            return order === "linear" ? colorScale(regionData) : colorScaleMap(mapNumberToRange(regionData,va))})
+                          .attr("stroke", "#fff")
+                          .attr("stroke-width", 1);
+                          mouseout(d);
+                          lineInd
+                          .style("display", "none");
+                          d3.select(".wrapper").select("svg").select("path#graph").remove()
+                          d3.select(".wrapper").select("svg").selectAll("circle#graph").remove()
+
+                          if (criToggle == true) {
+                            var selectedRow = avg.find(function(row) {
+                            return row.NeighbourhoodNumber === "175";
+                            });
+                            mapLabel.text("Toronto (City Average)")
+                            var regionData = selectedRow[crimeCat];
+                            graphRender(selectedRow,false,"mouseout2");
+                            mouseover(avg, regionData, true)
+                          }
+
+                        }
+                    })
+                }
+          
+
+        
+          
+
+            }
+            })}}); 
+                    
+        });
+        }
+
+        
+
+        render();
+        graphRender("",false,"end");
+
+    </script>
+      <!-- Add more D3 elements as needed -->
+    </svg>
+
+
+  <!-- SLIDER -->
+  <div id="container2">
+    <div id="slider" class="my-slider"></div>
+    <span id="selectedRange"></span>
+    <br>
+
+  <div id="sliderValue" class="sliderText"><span id="valueDisplay">0</span> to <span id="valueDisplay2">100 +</span> years old</div>
+  </div>
+  
+  <div id="containerYear" class = "yearSlider">
+    <div id="sliderYear" class="my-slider2"></div>
+    <div id="sliderYear1" class="my-slider2"></div>
+    <span id="selectedYear"></span>
+    <br>
+
+  </div>
+
+  <script>
+    const sliderYear = document.getElementById('containerYear');
+    const selectedRangeYear = document.getElementById('sliderYear');
+    const years = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+
+    noUiSlider.create(sliderYear, {
+      start: 2023, // Initial range (indexes of custom values)
+      connect: true,
+      step: 1,
+      behaviour: "unconstrained",
+      range: {
+        'min': 2014,
+        'max': 2023
+      }
+    });
+
+    // Identify when the user first changes the slider
+
+    sliderYear.noUiSlider.on('start', function () {
+      if (isFirstChange1) {
+        isFirstChange1 = false;
+      }
+    });
+
+    function getAllElementsOfRange(values, handle, unencoded, isTap, positions) {
+      if (isNaN(values[1])) {
+        values[1] = values[0]
+      }
+      if (values[0] > values[1]) {
+        ageSlider2 = values[0]
+        ageSlider1 = values[1]
+      } else {
+        ageSlider1 = values[0]
+        ageSlider2 = values[1]
+      }
+      ageSliderLength = ageSlider2 - ageSlider1
+
+      if (isFirstChange1===false) {
+        counter = 1;
+        category[0] = criCat
+        noRender = true
+        render("criSlider");
+        graphRender("fast",false,"yearSlider");
+      }
+    }
+
+    sliderYear.noUiSlider.on('update', getAllElementsOfRange);
+
+
+
+    // POPULATION AGE SLIDER
+    // Get HTML elements
+    const slider = document.getElementById('slider');
+    const selectedRange = document.getElementById('selectedRange');
+
+    const customValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+    // Create a range slider with two handles
+    noUiSlider.create(slider, {
+      start: [0, customValues.length - 2], // Initial range (indexes of custom values)
+      connect: true,
+      step: 1,
+      margin: 1,
+      range: {
+        'min': 0,
+        'max': customValues.length - 1
+      }
+    });
+    
+
+    // Identify when the user first changes the slider
+    let isFirstChange = true;
+
+    slider.noUiSlider.on('start', function () {
+      if (isFirstChange) {
+        isFirstChange = false;
+      }
+    });
+
+    // Initialize the span content
+    updateRange(slider.noUiSlider.get());
+
+    // Update the span content when the slider values change
+    slider.noUiSlider.on('update', updateRange);
+
+    function updateRange(values,d) {
+      // Convert indexes to custom values
+      selectedValues = values;
+
+      document.getElementById("valueDisplay").textContent = selectedValues[0] * 5
+      if (selectedValues[1]==20) {
+        document.getElementById("valueDisplay2").textContent = "100 +"
+      } else {
+        document.getElementById("valueDisplay2").textContent = (selectedValues[1] * 5) - 1
+      }
+
+      if (isFirstChange===false) {
+        counter = 1;
+        sliderOn = true;
+        noRender = true
+        render();
+        graphRender("",false,"popSlider");
+      }
+    }
+
+  </script>
+  <div id="toggleID1" class="toggleContainer1">
+      <input type="checkbox" class="toggle-checkbox" id="toggle1">
+      <label for="toggle1" class="toggle-switch">
+        <div class="toggle-indicator"></div>
+      </label>
+    </div>
+  </div>
+
+  <div id="toggleID2" class="toggleContainer2">
+      <input type="checkbox" class="toggle-checkbox" id="toggle2">
+      <label for="toggle2" class="toggle-switch">
+        <div class="toggle-indicator"></div>
+      </label>
+    </div>
+  </div>
+
+
+  <script>
+    // Get references to the checkbox and text elements
+    toggleCheckbox1 = document.getElementById('toggle1');
+    toggleCheckbox2 = document.getElementById('toggle2');
+    toggleCheckbox3 = document.getElementById('toggle3');
+    toggle2 = document.getElementById('toggleID2');
+
+    // Add an event listener to the checkbox
+    toggleCheckbox1.addEventListener('change', function() {
+      counter = 1
+      if (order === "linear") {
+        order = "equal"
+        d3.select("body").selectAll("text#button").text("Switch to Linear")
+      } else {
+        order = "linear"
+        d3.select("body").selectAll("text#button").text("Switch to Percentile")
+      }
+      noRender = true
+      render("crySlider");
+      graphRender("fast",false,"toggle1");
+    });
+
+    toggleCheckbox2.addEventListener('change', function() {
+      counter = 1
+      if (medianToggle == true) {
+        if (averageMedian === 0) {
+          averageMedian = 1
+          d3.select("body").selectAll("text#buttonMedian").text("Switch to Average")
+          changeVariable([displayCat + 'M',category[1]])
+        } else {
+          averageMedian = 0
+          d3.select("body").selectAll("text#buttonMedian").text("Switch to Median")
+          changeVariable([displayCat.slice(0, -1),category[1]])
+        }
+      }
+      if (medianToggle == 2) {
+        if (normalChange === 0) {
+          normalChange = 1
+          d3.select("body").selectAll("text#buttonMedian").text("Switch to Number View")
+          noRender = true
+          render();
+          graphRender("fast",false,"toggle2");
+          toggleDropdown("on")
+          document.getElementById("catTitle").innerHTML = titleCheck + "<span class='small-text'> " + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Change Since " + defYear + "</span>";
+        } else {
+          normalChange = 0
+          toggleDropdown("off")
+          d3.select("body").selectAll("text#buttonMedian").text("View Percentage Change Over Time")
+          noRender = true
+          render();
+          graphRender("fast",false,"toggle2");
+          toggleDropdown("off")
+          document.getElementById("catTitle").textContent = titleCheck
+        }
+      }
+      
+    });
+
+
+    //Initial State
+    toggleBold("togqAverageAge");
+    animateRect("togqAverageAge");
+    document.getElementById("init-sub").classList.toggle('open');
+    document.getElementById("togPopulation").style.marginBlockEnd = "0.2em"
+  </script>
+</div>
+</div>
+</body>
+</html>

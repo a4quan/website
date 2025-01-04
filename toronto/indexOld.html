@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<body>
+    <b><p id="togViolentCrime" onclick="toggleBold(id);changeVariable('ARHr2022')">Violent Crime</p></b>
+    <p id="togImmigration" onclick="toggleBold(id);changeVariable('Im')">Immigration Rate</p>
+    <p id="togDistress" onclick="toggleBold(id);changeVariable('DCoverPopulation')">Distress Calls</p>
+    <p id="togIncome" onclick="toggleBold(id);changeVariable('income2019')">2019 Median Income</p>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <style type="text/css">
+        
+        .wrapper {
+            margin-left: auto;
+            margin-right: auto;
+            width: 800px;
+        }
+
+        .map_mesh {
+            fill: none;
+            stroke: #fff;
+            stroke-width: 1px;
+            stroke-linejoin: round;
+        }
+
+        .map_mesh_hover {
+            stroke: #000000;
+            stroke-width: 2px;
+            stroke-linejoin: round;
+        }
+
+        .map_outline {
+            fill: #ddd;
+            stroke: #000;
+            stroke-width: 1.5px;
+        }
+
+        .map_neighbourhood {
+            fill: #1f77b4;
+        }
+
+        .map_neighbourhood:hover {
+            fill: #636363;
+            cursor: pointer;
+        }
+        
+    </style>
+    
+    <!--   center svg in div   -->
+    <div class="wrapper"></div>   
+    <script>
+
+        // With help from - http://bl.ocks.org/michellechandra/0b2ce4923dc9b5809922
+        var mapWidth = 550,
+            mapHeight = 550;
+
+        // functions
+        var c10 = d3.scale.category10();
+
+        var projection = d3.geo.albers();
+
+        var data = d3.map();
+
+        var path = d3.geo.path()
+            .projection(projection);
+
+        var svg = d3.select(".wrapper").append("svg")
+            .attr("width", mapWidth)
+            .attr("height", mapHeight);
+
+        var mapLabel = svg.append("text")
+            .attr("y", 20)
+            .attr("x", 0)
+            .attr("class", "map_neighbourhood_name")
+
+        var category = "ARHr2022"
+        var counter = 0
+        
+
+        
+        // load TopoJSON file
+        function render() {
+        d3.json("neighbourhoods-4326.json", function(error, toronto) {
+          if (error) throw error;
+
+          var arc;
+
+          d3.csv("arc1.csv")
+            .get(function(error, data) {
+                if (error) {
+                    console.error("Error loading CSV file:", error);
+                } else {
+                    // Call a function to process the data or perform other actions
+                    arc = data;
+                    console.log(data[1]);
+                    console.log(toronto.objects.toronto)
+                    processData(data);
+
+          var dataMap = d3.map(data, function(d) {
+                return d.NeighbourhoodNumber; // Replace with your actual identifier
+            });
+
+          // load CSV
+          //d3.csv("arc1.csv", function(csvData) {
+          //  processData(toronto, csvData);
+          //});
+
+          var neighbourhoods = topojson.feature(toronto, toronto.objects.toronto); 
+
+          // set default projection values 
+          projection
+              .scale(1)
+              .translate([0, 0]);
+
+          // creates bounding box and helps with projection and scaling
+          var b = path.bounds(neighbourhoods),
+              s = .95 / Math.max((b[1][0] - b[0][0]) / mapWidth, (b[1][1] - b[0][1]) / mapHeight),
+              t = [(mapWidth - s * (b[1][0] + b[0][0])) / 2, (mapHeight - s * (b[1][1] + b[0][1])) / 2];
+
+          // set project with bounding box data
+          projection
+              .scale(s)
+              .translate(t);
+
+
+            var colorScale = d3.scale.linear()
+                .domain([d3.min(data, function(d) { return +d[category]; }), d3.max(data, function(d) { return +d[category]; })])
+                .range(["#E6EDF2", "#004080"]);
+
+            if (counter===0) {
+            // get individual neighbourhoods
+            console.log("here")
+            svg.selectAll("path")
+                    .data(neighbourhoods.features)
+                .enter().append("path")
+                    //.attr("class", "map_neighbourhood")
+                    .attr("d", path)
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 1)
+                    .attr("fill", function(d, i) { 
+                        console.log(category);
+                        //console.log(d.properties.AREA_LONG_CODE + " " + data[i]["Population"]);
+                        var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[category];
+                        //console.log(regionData)
+                        return colorScale(regionData); })
+                    .on("mouseover", function(d) {
+                        var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[category];
+                        d3.select(this)
+                        .attr("fill","rgb(24,41,77)")
+                        .attr("stroke", "#E7E7E7")
+                        .attr("stroke-width", 3)
+                        mouseover(d, regionData)
+                        //this.parentNode.appendChild(this);
+                    }) 
+                    .on("mouseout", function(d) {
+                        var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[category];
+                        d3.select(this)
+                        .attr("fill", colorScale(regionData))
+                        .attr("stroke", "#fff")
+                        .attr("stroke-width", 1);
+                        mouseout(d);
+                    })
+                    .on("click", clicked);
+                } else {
+            svg.selectAll("path")
+                    .data(neighbourhoods.features).transition().duration(2000)
+                    //.attr("class", "map_neighbourhood")
+                    .attr("d", path)
+                    .attr("stroke", "#fff")
+                    .attr("stroke-width", 1)
+                    .attr("fill", function(d, i) { 
+                        console.log(category);
+                        //console.log(d.properties.AREA_LONG_CODE + " " + data[i]["Population"]);
+                        var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[category];
+                        //console.log(regionData)
+                        return colorScale(regionData); });
+            
+            svg.selectAll("path")
+                    .data(neighbourhoods.features)            
+                    .on("mouseover", function(d) {
+                        var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[category];
+                        d3.select(this)
+                        .attr("fill","rgb(24,41,77)")
+                        .attr("stroke", "#E7E7E7")
+                        .attr("stroke-width", 3)
+                        mouseover(d, regionData)
+                        //this.parentNode.appendChild(this);
+                    }) 
+                    .on("mouseout", function(d) {
+                        var regionData = dataMap.get(d.properties.AREA_LONG_CODE)[category];
+                        d3.select(this)
+                        .attr("fill", colorScale(regionData))
+                        .attr("stroke", "#fff")
+                        .attr("stroke-width", 1);
+                        mouseout(d);
+                    })
+                }
+          
+
+        
+          
+
+            }
+            }); 
+                    
+        });
+        }
+
+        render();
+
+        function mouseover(d,pro) {   
+          console.log(pro)
+          //var mOverRegionData = dataMap.get(d.properties.AREA_LONG_CODE)["ARHr2022"]; 
+          mapLabel.text(d.properties.AREA_LONG_CODE + " " + d.properties.AREA_NAME + " " + pro) // remove suffix id from name
+        }
+
+        function mouseout(d) {     
+          mapLabel.text("")  // remove out name
+        }
+
+        function clicked(d) {
+          console.log(d.properties.id, d.properties.AREA_NAME) // verify everything looks good
+          // Add code here
+        }
+
+        function processData(data) {
+            // Example: Log the values of the 'name' column
+            data.forEach(function(row) {
+                console.log(row.name);
+            });
+
+            // Example: Calculate the average of the 'value' column
+            var total = 0;
+            data.forEach(function(row) {
+                total += parseFloat(row.value);
+            });
+            var average = total / data.length;
+            console.log("Average value:", average);
+        }
+
+        function decimalToPercentage(decimalNumber) {
+            // Convert to percentage and format using toLocaleString
+            return (decimalNumber * 1).toLocaleString(undefined, { style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function toggleBold(id) {
+            unboldTog();
+            var paragraph = document.getElementById(id);
+            
+            // Check if the font-weight is currently bold
+            var isBold = paragraph.style.fontWeight === 'bold';
+
+            // Toggle the font-weight style
+            paragraph.style.fontWeight = isBold ? 'normal' : 'bold';
+        }
+    
+        function unboldTog() {
+            var paragraphs = document.querySelectorAll('p[id^="' + "tog" + '"]');
+            
+            // Iterate through paragraphs starting with the given prefix
+            paragraphs.forEach(function(paragraph) {
+            paragraph.style.fontWeight = 'normal';
+            });
+        }
+
+        function changeVariable(cat) {
+            category = cat;
+            console.log("Variable changed to:", cat);
+            counter = 1;
+            render();
+        }
+
+
+    </script> 
+    </body>
+</html>

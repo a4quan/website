@@ -1,0 +1,485 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'URW Geometric', sans-serif;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    margin-block-start: 2.5em;
+    margin-block-end: 0em;
+    margin-left: 22px; /* Adjust the value as needed for the desired indentation */
+  }
+
+  .headerTitle{
+    background: linear-gradient(to bottom, #d8d8d8, #ffffff);
+    width: 100%;
+    min-width: 1100px;
+    box-sizing: border-box;
+    position:absolute;
+  }
+
+  h2 {
+    margin-block-start: 0em;
+    margin-block-end: 0.5em;
+    margin-left: 22px; /* Adjust the value as needed for the desired indentation */
+    font-size: 40px;
+  }
+
+  .rectangle {
+    position: absolute;
+    top: 0px;
+    width: 0px;
+    height: 30px;
+    background-color: #666666;
+    z-index: 1;
+    border-radius: 0px 25px 25px 0px;
+  }
+
+  .menuTopLabel {
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 10px;
+    left: 15px;
+    cursor: pointer;
+  }
+
+  .menuLabel {
+    position: relative;
+    top: 5px;
+    left: 30px;
+    width: 300px;
+    bottom: 5px;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+  .catDesc {
+    margin-block-start: 0.1em;
+    margin-block-end: 0em;
+    margin-left: 22px; /* Adjust the value as needed for the desired indentation */
+    font-size: 18px;
+  }
+
+  .yearSlider .noUi-base .noUi-origin .noUi-handle {
+    width: 19px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .yearSlider .noUi-base .noUi-origin .noUi-handle:before {
+    display: none;
+  }
+
+  .yearSlider .noUi-base .noUi-origin .noUi-handle:after {
+    display: none;
+  }
+
+  .yearSlider .noUi-base {
+    top: -21px;
+  }
+
+  .yearSlider .noUi-base .noUi-connects .noUi-connect {
+    height: 6px;
+    background-color: #656565;
+  }
+  
+  .yearSlider {
+    position: absolute;
+    left: 396px;
+    top: 400px;
+    width: 327px;
+    height: 8px;
+    display: none;
+    opacity: 0;
+    transition: opacity 1s ease-in-out
+  }
+
+  .my-slider2 .noUi-handle:before {
+    display: none;
+  }
+
+  .my-slider2 .noUi-handle:after {
+    display: none;
+  }
+
+
+  .my-slider {
+    height: 9px; /* Set your desired height */
+  }
+
+  .my-slider .noUi-horizontal .noUi-handle {
+    width: 19px;
+    height: 20px;
+    right: -17px;
+    top: -7px;
+  }
+
+  .my-slider .noUi-handle:before {
+    display: none;
+  }
+
+  .my-slider .noUi-handle:after {
+    display: none;
+  }
+
+  .my-slider .noUi-handle {
+    background: #e2e2e2;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); /* Set handle box shadow */
+    width: 20px; /* Set handle width */
+    height: 20px; /* Set handle height */
+    cursor: pointer;
+  }
+
+  .my-slider .noUi-connect {
+    background: #a8a8a8; /* Change connect element color */
+  }
+
+  .left-container {
+    width: 330px; /* Set the width of your container */
+    font-family: 'URW Geometric', sans-serif;
+    font-size: 18px;
+    color: #ffffff;
+  }
+
+  .menu-container {
+    width: 330px; /* Set the width of your container */
+    overflow: auto; /* Add a scrollbar when content overflows */
+    border: 0px solid #ccc; /* Optional: Add a border for clarity */
+  }
+
+  .menuI {
+    display: flex;
+    justify-content: space-between; /* Adjust as needed */
+    align-items: center; /* Adjust as needed */
+    flex-wrap: wrap; /* Items will wrap to the next line if the container is not wide enough */
+  }
+
+  .bottom-menu {
+    display: flex; /* Use flexbox */
+    height: 60px;
+    background-color: #252427;
+  }
+
+  .ringL {
+    width: 67%;
+    height: 56px;
+    border-left: 7px;
+    border: 2px solid #252427; /* Outside ring color */
+  }
+
+  .ringR {
+    width: 33%;
+    height: 56px;
+    border-right: 7px;
+    border: 2px solid #252427; /* Outside ring color */
+  }
+
+  .helpContainer {
+    background-color: #252427;
+    width: 95%;
+    height: 56px;
+    text-align: right;
+    position: relative;
+    left: 4px;
+    cursor: pointer;
+  }
+  
+  .helpText {
+    width: 100%;
+    height: 56px;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    align-items: center;
+  }
+
+  #helperText {
+    display: none;
+  }
+
+  #helpTitle {
+    margin-block-start: 1em;
+  }
+
+
+  .helpContainer:hover {
+    background-color: #4d4d4d;
+  }
+  
+  .color-container {
+    background-color: #252427;
+    width: 98%;
+    padding-left: 5px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+  }
+
+  .color-container:hover {
+    background-color: #4d4d4d;
+  }
+
+  .color-container:hover .picker {
+    border-color: #4d4d4d;
+  }
+
+  .picker {
+    block-size: 35px;
+    border-width: 5px;
+    border-color: #252427;
+    cursor: pointer;
+    bottom: 3px;
+    position: relative;
+  }
+
+  .pickerText {
+    margin-top: 0px;
+    font-size: 16px;
+    margin-right:5px;
+    border-color: #4d4c4c;
+  }
+
+  .top-container {
+    position: absolute;
+    left: 330px; /* Set your desired x point */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f0f0f0; /* Set your desired background color */
+    overflow: hidden; /* Optional: Hide content overflow */
+  }
+
+  #crime-container {
+    position: absolute;
+    top: 320px;
+    left: 320px;
+    width: 300px;
+  }
+
+  #container {
+    width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #container2 {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+  }
+
+  .arrow-icon {
+    position: relative;
+    top: -2px;
+    right: 17px; /* Adjust the position as needed */
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 6px 0 6px; /* Adjust the size as needed */
+    border-color: #fffffff0 transparent transparent transparent; /* Adjust the color as needed */
+    transition: transform 0.3s ease; /* Smooth transition for the arrow icon */
+  }
+  .vertical-line {
+    height: 35px; /* Set the desired height */
+    width: 2px; /* Set the thickness of the line */
+    background-color: #666666; /* Set the color of the line */
+    position: relative;
+    top: 13px;
+    left: 222px;
+  }
+
+  #toggleID {
+    width: 300px;
+    display: none;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    position: relative;
+  }
+
+  #yearPicker {
+    height: 40px;
+    background-color: #252427;
+    color: #ffffff;
+    font-size: 16px;
+    display: flex;
+  }
+
+  #comYearText {
+    margin-left: 10px;
+    align-items: center;
+    display: flex;
+  }
+
+  #yearSelect {
+    height: 30px;
+    position: relative;
+    left: 15px;
+    top: 3px;
+    width: 60px;
+  }
+
+  #yearSelect option {
+    text-align: right;
+    margin-right: 2px;
+  }
+
+  #menu {
+    height: calc(100vh - 105px);
+    min-height: 800px;
+    background-color: #252427;
+    padding: 0px;
+    box-sizing: border-box;
+  }
+
+  #content {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .wrapper {
+          margin-left: auto;
+          margin-right: auto;
+      }
+
+  .map_mesh {
+      fill: none;
+      stroke: #fff;
+      stroke-width: 1px;
+      stroke-linejoin: round;
+  }
+
+  .map_mesh_hover {
+      stroke: #000000;
+      stroke-width: 2px;
+      stroke-linejoin: round;
+  }
+
+  .map_outline {
+      fill: #4d4c4c;
+      stroke: #000;
+      stroke-width: 1.5px;
+  }
+
+  .map_neighbourhood {
+      fill: #1f77b4;
+  }
+
+  .map_neighbourhood:hover {
+      fill: #636363;
+      cursor: pointer;
+  }
+
+  /* Hide the sub-menus by default */
+  .sub-menu {
+    font-size: 16px;
+    display: none;
+  }
+
+  .sub-menu.open {
+    display: block;
+}
+
+  .arrow-icon.open {
+    transform: rotate(180deg);
+  }
+
+
+  #sliderContainer {
+    width: 300px;
+    margin: 50px auto;
+  }
+
+  .sliderText {
+    font-size: 20px;
+  }
+
+  /* TOGGLE */
+      /* Style for the toggle switch container */
+      .toggleContainer1 {
+        position: absolute;
+        left: 1370px; /* set the x-coordinate */
+        top: 652px; /* set the y-coordinate */
+        display: block;
+        align-items: center;
+      }
+
+      .toggleContainer2 {
+        position: absolute;
+        left: 1370px; /* set the x-coordinate */
+        top: 672px; /* set the y-coordinate */
+        display: block;
+        align-items: center;
+      }
+      
+      /* Style for the hidden checkbox */
+      .toggle-checkbox {
+        display: none;
+      }
+  
+      /* Style for the toggle switch (the sliding button) */
+      .toggle-switch {
+        width: 18px;
+        height: 10px;
+        background-color: #cecece;
+        border-radius: 15px;
+        position: relative;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: inline-block;
+      }
+  
+      /* Style for the indicator (the circle) inside the toggle switch */
+      .toggle-indicator {
+        right: 11px;
+        width: 15px;
+        height: 15px;
+        background-color: #252427;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(4px, -50%);
+        transition: transform 0.3s;
+      }
+  
+      /* Style for the label (optional) */
+      .toggle-label {
+        margin-left: 10px;
+      }
+  
+      /* Change the background color when the checkbox is checked */
+      .toggle-checkbox:checked + .toggle-switch {
+        background-color: #e5e5e5;
+      }
+  
+      /* Move the indicator to the right when the checkbox is checked */
+      .toggle-checkbox:checked + .toggle-switch .toggle-indicator {
+        transform: translate(calc(95%), -50%);
+      }
+
+    .footer { 
+    position: absolute; 
+    height: 5vh;
+    left: 0; 
+    z-index: 10;
+  }
+
+  .small-text {
+    font-size: 24px;
+  }

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Quan - Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .aspect-4-3 {
+            aspect-ratio: 4/3;
+        }
+    </style>
+</head>
+<body class="bg-green-50 min-h-screen">
+    <!-- Header -->
+    <div class="container mx-auto px-2 py-12 relative">
+        <div class="absolute right-2 top-1/2 transform -translate-y-1/2">
+            <nav class="space-x-8">
+                <a href="https://www.linkedin.com/in/alex-quan-45134016b/" class="text-gray-600 hover:text-green-700 text-lg">Contact Me</a>
+                <!-- <a href="#resume" class="text-gray-600 hover:text-green-700 text-lg">Resume</a> -->
+            </nav>
+        </div>
+        <h1 class="text-5xl font-bold text-center text-gray-800">Alex Quan</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-2 py-8">
+        <!-- Project Grid -->
+        <div class="grid grid-cols-4 gap-4 w-full mx-auto">
+            <!-- Project 1 -->
+            <div class="bg-white shadow-lg overflow-hidden transition duration-300 hover:shadow-xl rounded w-full">
+                <div class="relative aspect-4-3">
+                    <a href="https://substack.com/home/post/p-139385395" target="_blank">
+                        <img src="1.jpg" alt="Tennis Simulation Project" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
+                            <span class="text-white text-lg font-medium opacity-0 hover:opacity-100 transition-opacity duration-300">View Project</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="p-4 text-center bg-gradient-to-b from-green-50 to-white">
+                    <div class="h-20 flex items-center justify-center">
+                        <h3 class="text-xl font-semibold text-green-800">Tennis Simulation Models</h3>
+                    </div>
+                    <p class="text-gray-700">This article explores my development of a statistical model designed to predict professional tennis matches, specifically focusing on ATP Tour level competitions from 2014 to 2023. Through rigorous backtesting of 16,668 matches, the model identified 2,625 high-confidence matches, achieving a success rate of 52.4% and generating an average return of $1.048 per dollar wagered.</p>
+<p class="text-gray-700 mt-4">The project was a deep dive into sport analytics, statistical modeling and risk assessment. By simulating individual points and incorporating variables such as court surfaces, player statistics, and historical performance, the model reveals patterns that challenge traditional betting models.</p>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="bg-white shadow-lg overflow-hidden transition duration-300 hover:shadow-xl rounded w-full">
+                <div class="relative aspect-4-3">
+                    <a href="https://a4quan.github.io/toronto/" target="_blank">
+                        <img src="2.jpg" alt="Toronto Neighbourhood Data Map" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
+                            <span class="text-white text-lg font-medium opacity-0 hover:opacity-100 transition-opacity duration-300">View Project</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="p-4 text-center bg-gradient-to-b from-green-50 to-white">
+                    <div class="h-20 flex items-center justify-center">
+                        <h3 class="text-xl font-semibold text-green-800">Toronto Neighbourhood Data Map</h3>
+                    </div>
+                    <p class="text-gray-700">I developed an interactive web tool with D3.js that visualizes open data found on the City of Toronto's website across Toronto's 159 neighbourhoods, incorporating both demographic and crime-related statistics. Users can explore trends in population age, income distribution, and crime rates through customizable map visualizations. The tool features yearly data dating back to 2014 for crisis calls and crimes, allowing residents to view trends as they unfold and use a more data-driven approach to handle societal issues.</p>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="bg-white shadow-lg overflow-hidden transition duration-300 hover:shadow-xl rounded w-full">
+                <div class="relative aspect-4-3">
+                    <a href="https://floweroflifetoronto.ca" target="_blank">
+                        <img src="3.png" alt="Flower of Life Website" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
+                            <span class="text-white text-lg font-medium opacity-0 hover:opacity-100 transition-opacity duration-300">View Project</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="p-4 text-center bg-gradient-to-b from-green-50 to-white">
+                    <div class="h-20 flex items-center justify-center">
+                        <h3 class="text-xl font-semibold text-green-800">Flower of Life Website</h3>
+                    </div>
+                    <p class="text-gray-700">A website for the local yoga studio I go to built using Squarespace. The owners, who I have the pleasure of calling my friends, are amongst the kindest people I have ever met. The website was created and launched rapidly to meet the needs of their business.</p>
+                </div>
+            </div>
+
+            <!-- Project 4 -->
+            <div class="bg-white shadow-lg overflow-hidden transition duration-300 hover:shadow-xl rounded w-full">
+                <div class="relative aspect-4-3">
+                    <iframe
+                        class="w-full h-full object-cover"
+                        src="https://www.youtube.com/embed/MLp6KWwFZ_c"
+                        title="Tennis Game Demo"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="p-4 text-center bg-gradient-to-b from-green-50 to-white">
+                    <div class="h-20 flex items-center justify-center">
+                        <h3 class="text-xl font-semibold text-green-800">Untitled Tennis Game</h3>
+                    </div>
+                    <p class="text-gray-700">With rapid advancements in AI, it has never been easier to learn anything and grow. This project which builds on my passion for tennis aims to be a video game that can simulate the feeling of playing tennis at the highest levels. I am learning to use Unity and Blender as I go to incorporate my vision of what an excellent tennis game can be.</p>
+                    <p class="text-gray-700 mt-4"><i>"I submit that tennis is the most beautiful sport there is, and also the most demanding. It requires body control, hand-eye coordination, quickness, flat-out speed, endurance, and that weird mix of caution and abandon we call courage."</i> - David Foster Wallace</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

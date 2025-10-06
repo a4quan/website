@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('uploadedFile', fileInput.files[0]); // 'uploadedFile' is the name of the input
 
         // You will replace this URL with your actual backend endpoint
-        const uploadUrl = 'https://hudqddczfl.execute-api.ca-central-1.amazonaws.com/upload'; // Placeholder for your backend URL
+        const uploadUrl = 'https://hudqddczfl.execute-api.ca-central-1.amazonaws.com/dev/upload'; // Placeholder for your backend URL
 
         try {
             displayStatus('Uploading...'); // Show uploading message

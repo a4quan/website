@@ -3,23 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
+    <title>Submit Task</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Upload Your File</h1>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <div class="file-input-wrapper">
-                <input type="file" name="uploadedFile" id="fileInput" class="file-input" required>
-                <label for="fileInput" class="file-input-label">
-                    <span id="fileNameDisplay">Choose a file...</span>
-                    <span class="browse-button">Browse</span>
-                </label>
+        <h1 class="underlined">Submit Task</h1>
+        
+        <div class="content-wrapper">
+            <!-- Left Side: Form Options -->
+            <div class="left-section">
+                <div class="submission-info">
+                    <p><b>Submission Type: </b>OpenTrack Submission</p>
+                </div>
+                
+                <div class="simulation-options">
+                    <p><b>Simulation Options:</b></p>
+                    
+                    <!-- Static Run -->
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="staticRun" class="checkbox-input">
+                            <span>Static Run (Test 3: Validity Test)</span>
+                        </label>
+                        <div id="staticRunOptions" class="nested-options" style="display: none;">
+                            <label class="checkbox-label nested">
+                                <input type="checkbox" id="staticUseCN" class="checkbox-input">
+                                <span>Use CN and VIA Train Categories from PA Schedule B2-1</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Normal Runs -->
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="normalRuns" class="checkbox-input">
+                            <span>Normal Runs (Test 1: Normal Operations)</span>
+                        </label>
+                        <div id="normalRunsOptions" class="nested-options" style="display: none;">
+                            <div class="input-group">
+                                <label for="normalRunsNumber"><b>Normal Runs - Number of Runs</b></label>
+                                <input type="number" id="normalRunsNumber" class="number-input" min="0" value="0">
+                            </div>
+                            <label class="checkbox-label nested">
+                                <input type="checkbox" id="normalUseCN" class="checkbox-input">
+                                <span>Use CN and VIA Train Categories from PA Schedule B2-1</span>
+                            </label>
+                            <label class="checkbox-label nested">
+                                <input type="checkbox" id="normalIncludeFreight" class="checkbox-input">
+                                <span>Include Freight</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Delay Runs -->
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="delayRuns" class="checkbox-input">
+                            <span>Delay Runs (Test 2: Minimum Delays)</span>
+                        </label>
+                        <div id="delayRunsOptions" class="nested-options" style="display: none;">
+                            <div class="input-group">
+                                <label for="delayRunsNumber"><b>Delay Runs - Number of Runs</b></label>
+                                <input type="number" id="delayRunsNumber" class="number-input" min="0" value="0">
+                            </div>
+                            <label class="checkbox-label nested">
+                                <input type="checkbox" id="delayUseCN" class="checkbox-input">
+                                <span>Use CN and VIA Train Categories from PA Schedule B2-1</span>
+                            </label>
+                            <label class="checkbox-label nested">
+                                <input type="checkbox" id="delayIncludeFreight" class="checkbox-input">
+                                <span>Include Freight</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="submit-button">Upload File</button>
-        </form>
-        <div id="statusMessage" class="status-message"></div>
+            
+            <!-- Right Side: File Upload -->
+            <div class="right-section">
+                <h2>Upload Your File</h2>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="file-input-wrapper">
+                        <input type="file" name="uploadedFile" id="fileInput" class="file-input" accept=".zip" required>
+                        <label for="fileInput" class="file-input-label">
+                            <span id="fileNameDisplay">Choose a file...</span>
+                            <span class="browse-button">Browse</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="submit-button">Upload File</button>
+                </form>
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
